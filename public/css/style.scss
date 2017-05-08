@@ -1,0 +1,45 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+a.back {
+  float: right;
+}
+
+.input_wrong {
+  color: red;
+}
+.input__field {
+  padding-right: 30px;
+  margin-left: 20px;
+}
+.input__clear {
+  margin-left: -20px;
+  cursor: pointer;
+}
+.observer {
+  position: relative;
+  clear: both;
+  .product {
+    display: block;
+  }
+  .buy-modal {
+    position: absolute;
+    display: block;
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    background: #9fd;
+    text-align: center;
+    line-height: 75px;
+  }
+  .buy-modal_hide {
+    display: none;
+  }
+}

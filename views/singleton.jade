@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  h1= title
+  a.back(href="/") Back
+  pre.
+    var Singleton = (function(){
+      var instance;
+      var SERVER = 'localhost';
+
+      function Singleton () {
+        if(!instance) {
+          instance = this;
+        } else {
+          return instance;
+        }
+      }
+
+      Singleton.prototype.connect = function () {
+        console.log('connect '+ SERVER);
+      }
+
+      return Singleton;
+    }());
+
+    var s1 = new Singleton();
+    var s2 = new Singleton();
+    console.log(s1 === s2)
+
+    s2.connect();
+    s1.connect();
+  hr
+  script.
+    var Singleton = (function(){
+      var instance;
+      var SERVER = 'localhost';
+
+      function Singleton () {
+        if(!instance) {
+          instance = this;
+        } else {
+          return instance;
+        }
+      }
+
+      Singleton.prototype.connect = function () {
+        console.log('connect '+ SERVER);
+      }
+
+      return Singleton;
+    }());
+
+    var s1 = new Singleton();
+    var s2 = new Singleton();
+    console.log(s1 === s2)
+
+    s2.connect();
+    s1.connect();

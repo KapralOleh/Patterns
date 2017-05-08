@@ -1,0 +1,142 @@
+extends layout
+
+block content
+  h1= title
+  a.back(href="/") Back
+  .observer
+    .products
+      button.product(data-id="TV") TV
+      button.product(data-id="Phone") Phone
+      button.product(data-id="Window") Window
+      button.product(data-id="Table") Table
+    .busket
+      h3.basket__title Basket
+      ol.basket__products-list
+    .buy-modal.buy-modal_hide
+      h3.buy-modal__title Congrats
+      span.buy-modal_message
+
+  hr
+  pre.
+    // Observable
+    function Observable () {
+      var observers = [];
+      this.sendMessage = function (msg) {
+        for( var i = 0, len = observers.length; i < len; i++ ) {
+          observers[i].notify(msg);
+        }
+      }
+      this.addObserver = function (observer) {
+        observers.push(observer);
+      }
+    }
+
+    // [Observer]
+    function Observer(behavior) {
+      this.notify = function (msg) {
+        behavior(msg);
+      }
+    }
+
+    var observable = new Observable();
+
+    var obs1 = new Observer(function (msg) {
+      console.log('obs1 : '+ msg);
+    })
+    var obs2 = new Observer(function (msg) {
+      console.log('obs2 : '+ msg);
+    })
+
+    observable.addObserver(obs1);
+    observable.addObserver(obs2);
+    setTimeout(function () {
+      observable.sendMessage('Time :' + new Date());
+    },3000)
+  script.
+    // Observable
+    //- function Observable () {
+    //-   var observers = [];
+    //-   this.sendMessage = function (msg) {
+    //-     for( var i = 0, len = observers.length; i < len; i++ ) {
+    //-       observers[i].notify(msg);
+    //-     }
+    //-   }
+    //-   this.addObserver = function (observer) {
+    //-     observers.push(observer);
+    //-   }
+    //- }
+
+    //- // [Observer]
+    //- function Observer(behavior) {
+    //-   this.notify = function (msg) {
+    //-     behavior(msg);
+    //-   }
+    //- }
+
+    //- var observable = new Observable();
+
+    //- var obs1 = new Observer(function (msg) {
+    //-   console.log('obs1 : '+ msg);
+    //- })
+    //- var obs2 = new Observer(function (msg) {
+    //-   console.log('obs2 : '+ msg);
+    //- })
+
+    //- observable.addObserver(obs1);
+    //- observable.addObserver(obs2);
+    //- setTimeout(function () {
+    //-   observable.sendMessage('Time :' + new Date());
+    //- },3000)
+
+
+
+    // Observable
+    function Observable () {
+      var observers = [];
+      this.sendMessage = function (msg) {
+        for( var i = 0, len = observers.length; i < len; i++ ) {
+          observers[i].notify(msg);
+        }
+      }
+      this.addObserver = function (observer) {
+        observers.push(observer);
+      }
+    }
+
+    // [Observer]
+    function Observer(behavior) {
+      this.notify = function (msg) {
+        behavior(msg);
+      }
+    }
+
+    var observable = new Observable();
+
+    var basketObs = new Observer(function (id) {
+      $('.basket__products-list').append(
+        $('<li></li>')
+          .addClass('basket__product')
+          .text(id)
+      )
+    })
+    var modalObs = new Observer(function (id) {
+      var msg = id + ' added to cart';
+      $('.buy-modal_message').text( msg );
+      $('.buy-modal').removeClass('buy-modal_hide');
+      setTimeout(function(){
+        $('.buy-modal').addClass('buy-modal_hide');
+      },2000)
+    })
+
+    var serverObs = new Observer(function (id) {
+      console.log('id: '+ id)
+    })
+
+    observable.addObserver(basketObs);
+    observable.addObserver(modalObs);
+    observable.addObserver(serverObs);
+
+    $('.product').click(function (){
+      var id = $(this).attr('data-id')
+      observable.sendMessage(id);
+    })

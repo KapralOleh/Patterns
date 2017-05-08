@@ -1,0 +1,176 @@
+extends layout
+
+block content
+  h1= title
+  a.back(href="/") Back
+
+  pre.
+    var module = (function(){
+      var strategy = {};
+      return {
+        exec: function () {
+          strategy.exec();
+        },
+        changeStrategy: function(s) {
+          strategy = s;
+        }
+      };
+    }());
+
+    function Strategy() {};
+    Strategy.prototype.exec = function () {};
+
+    function Strategy1() {};
+    Strategy1.prototype = Object.create(Strategy.prototype);
+    Strategy1.prototype.exec = function () {
+      console.log('One');
+    };
+
+
+    function Strategy2() {};
+    Strategy2.prototype = Object.create(Strategy.prototype);
+    Strategy2.prototype.exec = function () {
+      console.log('Two');
+    };
+
+    module.changeStrategy( new Strategy1() );
+    module.exec();
+    module.changeStrategy( new Strategy2() );
+    module.exec();
+  hr
+  .strategy
+    .catalog
+      select.catalog__sort-type(id="" name="")
+        option(value="name") Name
+        option(value="price") Price
+        option(value="rating") Rating
+      button.catalog__exec-sort Sort
+      ul.catalog__list
+  script.
+    var module = (function(){
+      var strategy = {};
+      return {
+        exec: function () {
+          strategy.exec();
+        },
+        changeStrategy: function(s) {
+          strategy = s;
+        }
+      };
+    }());
+
+    function Strategy() {};
+    Strategy.prototype.exec = function () {};
+
+    function Strategy1() {};
+    Strategy1.prototype = Object.create(Strategy.prototype);
+    Strategy1.prototype.exec = function () {
+      console.log('One');
+    };
+
+
+    function Strategy2() {};
+    Strategy2.prototype = Object.create(Strategy.prototype);
+    Strategy2.prototype.exec = function () {
+      console.log('Two');
+    };
+
+    module.changeStrategy( new Strategy1() );
+    module.exec();
+    module.changeStrategy( new Strategy2() );
+    module.exec();
+
+
+
+    var Catalog = (function(){
+      var strategy = {};
+      var data = [
+          {
+            name:'Water',
+            price: 60,
+            rating: 4
+          },
+          {
+            name:'TV',
+            price: 1500,
+            rating: 3
+          },
+          {
+            name:'Phone',
+            price: 1000,
+            rating: 5
+          },
+          {
+            name:'Juice',
+            price: 90,
+            rating: 1
+          },
+      ];
+
+      function printData () {
+        $('.catalog__list').empty()
+        data.forEach(function(product){
+          $('.catalog__list').append(
+            $('<li></li>').text(product.name + ', ' + product.price + '. ' + product.rating)
+          );
+        });
+      }
+
+      printData();
+
+      return {
+        sort: function () {
+          strategy.sort(data);
+          printData();
+        },
+        changeStrategy: function(s) {
+          strategy = s;
+        }
+      };
+    }());
+
+    function SortStrategy() {};
+    SortStrategy.prototype.sort = function () {};
+
+    function NameSS() {};
+    NameSS.prototype = Object.create(SortStrategy.prototype);
+    NameSS.prototype.sort = function (data) {
+      data.sort(function(a,b){
+        return (a.name > b.name) ? 1 : -1;
+      })
+    };
+
+
+    function PriceSS() {};
+    PriceSS.prototype = Object.create(SortStrategy.prototype);
+    PriceSS.prototype.sort = function (data) {
+      data.sort(function(a,b){
+        return (a.price - b.price);
+      })
+    };
+
+    function RatingSS() {};
+    RatingSS.prototype = Object.create(SortStrategy.prototype);
+    RatingSS.prototype.sort = function (data) {
+      data.sort(function(a,b){
+        return (a.rating - b.rating);
+      })
+    };
+
+    Catalog.changeStrategy( new NameSS() );
+
+
+    $('.catalog__sort-type').change(function() {
+      var val = $(this).val();
+      if (val === 'name'){
+        Catalog.changeStrategy( new NameSS() );
+      } else if(val === 'price') {
+        Catalog.changeStrategy( new PriceSS() );
+      } else if(val === 'rating') {
+        Catalog.changeStrategy( new RatingSS() );
+      }
+    })
+    $('.catalog__exec-sort').click(function () {
+      Catalog.sort();
+    });
+

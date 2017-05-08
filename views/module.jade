@@ -1,0 +1,74 @@
+extends layout
+
+block content
+  h1= title
+  a.back(href="/") Back
+  pre.
+    var BascketModule = (function(){
+      var sum = 0,
+          goods = [];
+      return {
+        addProduct: function(product) {
+          sum += product.price;
+          goods.push(product);
+        },
+        printProducts: function() {
+          var goodsLength = goods.length;
+          console.log("Product : " + "Price");
+          for (var i = 0; i < goodsLength; i++) {
+            console.log(goods[i].name +' : '+ goods[i].price);
+          }
+          console.log("Total : " + sum);
+        }
+      }
+    }());
+    var apple = {
+      name : 'apple',
+      price : 10
+    }
+    var tv = {
+      name: 'sony',
+      price: 500
+    }
+
+    BascketModule.addProduct(apple);
+    BascketModule.addProduct(apple);
+
+    BascketModule.addProduct(tv);
+
+    BascketModule.printProducts();
+  hr
+  script.
+    var BascketModule = (function(){
+      var sum = 0,
+          goods = [];
+      return {
+        addProduct: function(product) {
+          sum += product.price;
+          goods.push(product);
+        },
+        printProducts: function() {
+          var goodsLength = goods.length;
+          console.log("Product : " + "Price");
+          for (var i = 0; i < goodsLength; i++) {
+            console.log(goods[i].name +' : '+ goods[i].price);
+          }
+          console.log("Total : " + sum);
+        }
+      }
+    }());
+    var apple = {
+      name : 'apple',
+      price : 10
+    }
+    var tv = {
+      name: 'sony',
+      price: 500
+    }
+
+    BascketModule.addProduct(apple);
+    BascketModule.addProduct(apple);
+
+    BascketModule.addProduct(tv);
+
+    BascketModule.printProducts();

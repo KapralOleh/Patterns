@@ -1,0 +1,151 @@
+extends layout
+
+block content
+  h1= title
+  a.back(href="/") Back
+    //- .input.input_wrong
+    //-   span.input__label Label
+    //-   input.input__field(type="text")
+    //-   span.input__clear x
+  pre.
+    function A() {
+      this.get = function() {
+        console.log('Class A');
+      };
+    }
+
+    function Decorator(obj) {
+      this._obj = obj;
+    }
+    Decorator.prototype = Object.create(A.prototype);
+    Decorator.prototype.constructor = Decorator;
+
+    function DecoratorB(obj) {
+      Decorator.call(this,obj);
+      this.get = function() {
+        this._obj.get();
+        console.log('DecoratorB');
+      };
+    }
+    DecoratorB.prototype = Object.create(Decorator.prototype);
+    DecoratorB.prototype.constructor = DecoratorB;
+
+    function DecoratorC(obj) {
+      Decorator.call(this,obj);
+      this.get = function() {
+        this._obj.get();
+        console.log('DecoratorC');
+      };
+    }
+    DecoratorC.prototype = Object.create(Decorator.prototype);
+    DecoratorC.prototype.constructor = DecoratorC;
+
+    var obj1 = new A();
+    var obj2 = new DecoratorB(new A());
+    var obj3 = new DecoratorC(new A());
+    var obj4 = new DecoratorB(new DecoratorC(new A()));
+  hr
+  script.
+    function A() {
+      this.get = function() {
+        console.log('Class A');
+      };
+    }
+
+    function Decorator(obj) {
+      this._obj = obj;
+    }
+    Decorator.prototype = Object.create(A.prototype);
+    Decorator.prototype.constructor = Decorator;
+
+    function DecoratorB(obj) {
+      Decorator.call(this,obj);
+      this.get = function() {
+        this._obj.get();
+        console.log('DecoratorB');
+      };
+    }
+    DecoratorB.prototype = Object.create(Decorator.prototype);
+    DecoratorB.prototype.constructor = DecoratorB;
+
+    function DecoratorC(obj) {
+      Decorator.call(this,obj);
+      this.get = function() {
+        this._obj.get();
+        console.log('DecoratorC');
+      };
+    }
+    DecoratorC.prototype = Object.create(Decorator.prototype);
+    DecoratorC.prototype.constructor = DecoratorC;
+
+    var obj1 = new A();
+    var obj2 = new DecoratorB(new A());
+    var obj3 = new DecoratorC(new A());
+    var obj4 = new DecoratorB(new DecoratorC(new A()));
+
+    obj1.get()
+    console.log('------')
+    obj2.get()
+    console.log('------')
+    obj3.get()
+    console.log('------')
+    obj4.get()
+    console.log('------')
+
+
+    function Input(labelText) {
+      var $element = $('<div></div>').addClass('input').append(
+        $('<span></span>').addClass('input__label').text(labelText),
+        $('<input>').addClass('input__field')
+      );
+      this.get = function() {
+        return $element
+      };
+    }
+
+    function Decorator(obj) {
+      this._obj = obj;
+      this.get = function() {
+        return this._obj.get();
+      };
+    }
+    Decorator.prototype = Object.create(Input.prototype);
+    Decorator.prototype.constructor = Decorator;
+
+    function ClearDec(obj) {
+      Decorator.call(this,obj);
+      this._obj.get().append(
+        $('<span>x</span>').addClass('input__clear')
+      );
+
+      $(document.body).on('click','.input__clear', function (e) {
+        $(e.target).siblings('.input__field').val('');
+      })
+    }
+    ClearDec.prototype = Object.create(Decorator.prototype);
+    ClearDec.prototype.constructor = ClearDec;
+
+    function ValidDec(obj) {
+      Decorator.apply(this,arguments);
+
+      this._obj.get().children('.input__field').attr('data-validate','')
+
+      $(document.body).on('input','.input__field[data-validate]', function (e) {
+        if ( /[0-9]/.test( $(e.target).val() ) ){
+          $(e.target).parent().addClass('input_wrong')
+        } else {
+          $(e.target).parent().removeClass('input_wrong')
+        }
+
+      });
+    }
+
+    ValidDec.prototype = Object.create(Decorator.prototype);
+    ValidDec.prototype.constructor = ValidDec;
+
+    var i = new Input('Simple');
+    var iClear = new ClearDec(new Input('Clear'));
+    var iValid = new ValidDec(new Input('Check'));
+    var iBoth = new ValidDec(new ClearDec(new Input('Both')));
+
+    $(document.body).append(i.get(),iClear.get(),iValid.get(),iBoth.get())
