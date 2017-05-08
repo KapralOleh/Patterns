@@ -1,4 +1,4 @@
-<b>Patterns<b><br>
+<b>Patterns</b><br>
 
 npm i<br>
 bower i<br>
